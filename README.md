@@ -1,40 +1,83 @@
-# Lexera Digital Wallet (Backend) 🛡️
+# Lexera Digital Wallet 🛡️
 
 [![License: CC BY-NC-SA 4.0](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 
-Lexera Digital Wallet is a high-security, standard-compliant digital wallet for official electronic documents (IDs, Diplomas, etc.). It leverages a "Triangle of Trust" architecture to allow for instant, tamper-proof verification of credentials in both online and offline scenarios.
+Lexera Digital Wallet is a high-performance backend infrastructure designed for the secure issuance, management, and verification of **Verifiable Credentials**. Built with Spring Boot 3, it implements modern cryptographic standards to bridge the gap between physical identity and digital security.
 
-## 🚀 Features & Architecture
+## 🏗️ Architecture & Design Patterns
 
-### 1. Identity & Privacy (Phase 1)
-- **Root Identity Hashing:** Implemented a SHA-256 salted hashing mechanism to generate unique "Digital Fingerprints" for users, avoiding the storage of raw PII.
-- **Application-Level Encryption (ALE):** Using **Jasypt** and JPA Attribute Converters to encrypt PII (Personally Identifiable Information) before it reaches the database.
-- **Zero-Trust Storage:** The database only stores encrypted strings; decryption keys are managed strictly at the application level.
+The system is built on a "Privacy-by-Design" philosophy. It ensures that PII (Personally Identifiable Information) is transformed into deterministic hashes, allowing for identity verification without exposing sensitive user data.
 
-### 2. Cryptographic Trust (Phase 2)
-- **RSA Signing:** Documents are issued as **JSON Web Tokens (JWT)** signed with an RSA-256 private key.
-- **Public Key Discovery:** Implemented a standard `/.well-known/jwks.json` endpoint for Verifier apps to fetch public keys for offline verification.
-- **Modern Time API:** Precise document validity management using `java.time.Instant`.
 
-### 3. Versatile Issuance (Phase 3)
-- **Strategy Pattern:** A pluggable `DocumentProvider` interface allows for easy extension. Adding a new document type (e.g., "Health Certificate") requires zero changes to the core signing logic.
+
+### Core Modules:
+* **Identity Layer:** Utilizes deterministic SHA-256 hashing with server-side salting to create unique `RootIdentityHashes`.
+* **Issuance Engine:** Implements a **Strategy Pattern** via `DocumentProvider` interfaces, allowing the system to support multiple credential types (e.g., Diplomas, ID Cards, Certifications) dynamically.
+* **Crypto Service:** Handles asymmetric RSA-256 signing to generate non-repudiable JWT-based credentials.
+* **Status Registry:** A real-time revocation system that provides signed validity proofs for third-party verifiers.
+
+---
+
+## 🚀 Key Features
+
+* **Verifiable Credentials:** Issues standard-compliant JWTs containing claims, identity hashes, and unique JTIs.
+* **Revocation Mechanism:** Full lifecycle management allows for immediate credential revocation with audit-trail reasons.
+* **Standardized Error Handling:** A robust global exception handler providing clear, typed error responses (`ERR_UNSUPPORTED_TYPE`, `ERR_IDENTITY_NOT_FOUND`).
+* **Interactive Documentation:** Automated OpenAPI 3.0 (Swagger) integration with logical grouping and pre-filled examples.
+
+---
 
 ## 🛠️ Tech Stack
-- **Framework:** Spring Boot 3.x (Java 21+)
-- **Security:** Jasypt
-- **Cryptography:** JJWT, Nimbus JOSE+JWT
-- **Database:** PostgreSQL
+
+* **Java 21** & **Spring Boot 3.2+**
+* **Spring Data JPA:** For persistent identity and status mapping.
+* **JJWT (Java JWT):** For cryptographic operations and token construction.
+* **SpringDoc OpenAPI:** For professional-grade API documentation.
+* **Lombok:** To maintain a clean, boilerplate-free codebase.
+* **Maven:** For dependency management and automated build cycles.
+
+---
+
+## 📖 API Reference & Documentation
+
+Lexera features a fully interactive Swagger UI, allowing developers to test the issuance flow directly from the browser.
+
+| Endpoint                        | Method | Description |
+|:--------------------------------| :--- | :--- |
+| `/api/v1/users`                 | `POST` | Register a user and generate a Root Identity Hash. |
+| `/api/v1/credentials/issue`     | `POST` | Generate and sign a new Verifiable Credential. |
+| `/api/v1/credentials/{id}/status` | `GET` | Retrieve a signed proof of a credential's validity. |
+| `/api/v1/credentials/{id}/revoke` | `POST` | Revoke a credential and update the registry. |
+
+**Access the UI at:** `http://localhost:8080/swagger-ui/index.html`
 
 ---
 
 ## 🚦 Getting Started
 
 ### Prerequisites
-- JDK 21 or higher
-- Maven 3.6+
+* JDK 21
+* Maven 3.9+
+* PostgreSQL (or H2 for local testing)
 
-### Configuration
-Update `src/main/resources/application.yml`.
+### Installation
+1. Clone the repository:
+```bash
+git clone https://github.com/alexchirea/digital-wallet-api
+```
+
+2. Build the project:
+```bash
+mvn clean install
+```
+
+3. Run the application:
+```bash
+mvn spring-boot:run
+```
+
+## 🔒 Security Note
+This project demonstrates identity issuance concepts. In a production environment, the `SigningService` should be integrated with a Hardware Security Module (HSM) or a secure Vault for private key management.
 
 ## 🤝 Contributing
 This is a personal project, but I welcome feedback and suggestions!
