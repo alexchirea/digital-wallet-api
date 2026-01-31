@@ -1,3 +1,21 @@
 spring:
   application:
     name: wallet-api
+  datasource:
+    url: ${DB_HOST:jdbc:postgresql://localhost:5432/mydb}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASS:password}
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+jasypt:
+  encryptor:
+    password: ${ENCRYPTION_KEY:super-secret-vault-key}
+    algorithm: PBEWithMD5AndDES
+    iv-generator-classname: org.jasypt.iv.RandomIvGenerator
+
+wallet:
+  app:
+    secret:
+      salt: ${WALLET_APP_SECRET_SALT:super-secret-salt}

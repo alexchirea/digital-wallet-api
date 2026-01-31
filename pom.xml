@@ -6,25 +6,44 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>4.0.2</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath/>
     </parent>
     <groupId>ro.lexera</groupId>
     <artifactId>wallet</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>wallet-api</name>
-    <description>wallet-api</description>
+    <name>Lexera Digital Wallet API</name>
+    <description>Secure backend for digital identity issuance and cryptographic document verification.</description>
     <url/>
     <licenses>
-        <license/>
+        <license>
+            <name>Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International</name>
+            <url>https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode</url>
+            <distribution>repo</distribution>
+            <comments>
+                A non-commercial, share-alike license that allows for modifications
+                with attribution but forbids commercial use.
+            </comments>
+        </license>
     </licenses>
     <developers>
-        <developer/>
+        <developer>
+            <id>alexchirea</id>
+            <name>Alexandru Chirea</name>
+            <email>alex@lexera.ro</email>
+            <url>https://lexera.ro</url>
+            <organization>Lexera Technologies</organization>
+            <organizationUrl>https://lexera.ro</organizationUrl>
+            <roles>
+                <role>architect</role>
+                <role>developer</role>
+            </roles>
+        </developer>
     </developers>
     <scm>
-        <connection/>
-        <developerConnection/>
-        <tag/>
-        <url/>
+        <connection>scm:git:git://github.com/alexchirea/digital-wallet-api.git</connection>
+        <developerConnection>scm:git:ssh://github.com:alexchirea/digital-wallet-api.git</developerConnection>
+        <url>https://github.com/alexchirea/digital-wallet-api/tree/main</url>
+        <tag>HEAD</tag>
     </scm>
     <properties>
         <java.version>21</java.version>
@@ -46,9 +65,34 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>0.13.0</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <version>0.13.0</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
             <groupId>com.github.ulisesbocchio</groupId>
             <artifactId>jasypt-spring-boot-starter</artifactId>
             <version>4.0.4</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.20.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.nimbusds</groupId>
+            <artifactId>nimbus-jose-jwt</artifactId>
+            <version>10.7</version>
             <scope>compile</scope>
         </dependency>
 
@@ -70,6 +114,16 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webmvc-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
